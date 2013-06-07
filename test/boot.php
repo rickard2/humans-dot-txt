@@ -1,3 +1,3 @@
 <?php
 
-require 'humans-dot-txt.php';
+require 'dist/humans-dot-txt.php';

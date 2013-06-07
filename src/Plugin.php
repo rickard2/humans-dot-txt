@@ -1,38 +1,12 @@
 <?php
-/*
-Plugin Name: Humans dot txt 
-Plugin URI: http://www.0x539.se/wordpress/humans-dot-txt
-Description: Auto generate a humans.txt file for your wordpress site(s)!
-Version: 1.0.3
-Author: Rickard Andersson
-Author URI: http://www.0x539.se
-License: GPLv2
-*/
 
 /**
- * Humans-dot-txt takes care of generating your humans.txt file!
- *
- * @author  Rickard Andersson <rickard@0x539.se>
- * @package Humans-dot-txt
- * @todo    Translation
- * @todo    Default template
- */
-
-/**
- * The current version of the plugin
- */
-DEFINE('HUMANS_DOT_TXT_VERSION', '1.0.3');
-
-/**
- * This is the main class that does all the magic
  *
  * @author  Rickard Andersson <rickard@0x539.se>
  * @package Humans-dot-txt
  */
 class HumansTxt
 {
-
-
     /**
      * Stores the result from generateFile(); call
      */
@@ -49,7 +23,6 @@ class HumansTxt
      * When the class is loaded, all the neccessary hooks are added
      *
      * @since 1.0
-     * @return void
      */
     function __construct()
     {
@@ -79,7 +52,6 @@ class HumansTxt
      */
     function generateFile()
     {
-
         if (is_writable(ABSPATH) || file_exists(ABSPATH . 'humans.txt') && is_writable(ABSPATH . 'humans.txt')) {
             $result = file_put_contents(ABSPATH . 'humans.txt', HumansTxt::humans(true));
 
@@ -99,12 +71,11 @@ class HumansTxt
     function wp_head()
     {
         ?>
-        <link href="<?php echo site_url(); ?>/humans.txt" rel="author" type="text/plain">
-    <?php
+        <link href="<?php echo site_url(); ?>/humans.txt" rel="author" type="text/plain"><?php
     }
 
     /**
-     * Adds a menu entry for configurating the plugin, hooked into the "admin_menu" WP action.
+     * Adds a menu entry for configuring the plugin, hooked into the "admin_menu" WP action.
      *
      * @since 1.0
      * @return void
@@ -245,167 +216,92 @@ class HumansTxt
         return is_array($plugins) ? $plugins : array();
     }
 
-    /**
-     * Get an array of authors on this blog
-     *
-     * @return array
-     * @since 1.0
-     */
-    static function getAuthors()
-    {
-
-        $authors_template = get_option('authors_template');
-
-        if (strlen($authors_template) == 0) {
-            return array();
-        }
-
-        $authors_prefix = get_option('authors_prefix');
-        $authors_suffix = get_option('authors_suffix');
-
-        $needles = array(
-            '%AUTHOR_LOGIN%',
-            '%AUTHOR_DISPLAY_NAME%',
-            '%AUTHOR_EMAIL%'
-        );
-
-        $obfuscate_email = get_option('humans_obfuscate_email');
-
-        foreach (get_users_of_blog() as $author) {
-
-            $values = array(
-                $author->user_login,
-                $author->display_name,
-                $obfuscate_email == 1 ? str_replace('@', ' (at) ', $author->user_email) : $author->user_email
-            );
-
-            $author_string = "";
-
-            if (strlen($authors_prefix) > 0) {
-                $author_string = $authors_prefix;
-            }
-
-            $author_string .= str_replace($needles, $values, $authors_template);
-
-            if (strlen($authors_suffix) > 0) {
-                $author_string .= $authors_suffix;
-            }
-
-            $authors[] = $author_string;
-        }
-
-        return is_array($authors) ? $authors : array();
-    }
-
-    /**
-     * This is the main function displaying the humans.txt contents.
-     * The filter 'humans_output' will be applied before the output is sent.
-     *
-     * @since 1.0
-     * @return bool
-     * @uses  $wp_version
-     * @uses  PHP_VERSION
-     */
     static function humans($return)
     {
+        $config   = new HT_Config();
+        $provider = new HT_Provider();
 
-        global $wp_version;
+        $humans_template = $config->get_humans_template();
 
-        $humans_template = get_option('humans_template');
+        $plugins_template  = $config->get_plugins_template();
+        $plugins_separator = $config->get_plugins_separator();
+        $plugins_prefix    = $config->get_plugins_prefix();
+        $plugins_suffix    = $config->get_plugins_suffix();
 
-        if (strlen($humans_template) == 0) {
-            return false;
-        }
+        $authors_template  = $config->get_authors_template();
+        $authors_separator = $config->get_authors_separator();
+        $authors_prefix    = $config->get_authors_prefix();
+        $authors_suffix    = $config->get_authors_suffix();
 
-        // Get plugins data
-        $plugins           = HumansTxt::getPlugins();
-        $plugins_separator = get_option('plugins_separator');
+        $obfuscate_email = $config->get_obfuscate_email();
 
-        // Get authors data
-        $authors          = HumansTxt::getAuthors();
-        $authors_template = get_option('authors_template');
+        $php_version = $provider->get_php_version();
+        $wp_version  = $provider->get_wp_version();
 
-        // Get theme data
-        $theme_data = get_theme(get_current_theme());
+        $plugins = $provider->get_plugins();
+        $authors = $provider->get_authors();
 
-        // Get post and pages data
-        $count_posts          = wp_count_posts();
-        $count_pages->publish = count(get_pages());
-        $count_pages->future  = count(get_pages(array('post_status' => 'future')));
-        $count_pages->draft   = count(get_pages(array('post_status' => 'draft')));
-        $count_pages->pending = count(get_pages(array('post_status' => 'pending')));
-        $count_pages->private = count(get_pages(array('post_status' => 'private')));
+        $theme_name        = $provider->get_theme_name();
+        $theme_description = $provider->get_theme_description();
+        $theme_author_name = $provider->get_theme_author_name();
+        $theme_author_uri  = $provider->get_theme_author_uri();
+        $theme_version     = $provider->get_theme_version();
+        $theme_parent      = $provider->get_theme_parent();
 
-        // Array containing all template tags
-        $needles = array(
-            '%PHP_VERSION%',
-            '%WP_VERSION%',
-            '%ACTIVE_PLUGINS%',
-            '%AUTHORS%',
-            '%THEME_NAME%',
-            '%THEME_DESCRIPTION%',
-            '%THEME_AUTHOR%',
-            '%THEME_AUTHOR_URI%',
-            '%THEME_VERSION%',
-            '%THEME_PARENT%',
-            '%NUMBER_OF_PUBLISHED_POSTS%',
-            '%NUMBER_OF_FUTURE_POSTS%',
-            '%NUMBER_OF_DRAFT_POSTS%',
-            '%NUMBER_OF_PENDING_POSTS%',
-            '%NUMBER_OF_PRIVATE_POSTS%',
-            '%NUMBER_OF_PUBLISHED_PAGES%',
-            '%NUMBER_OF_FUTURE_PAGES%',
-            '%NUMBER_OF_DRAFT_PAGES%',
-            '%NUMBER_OF_PENDING_PAGES%',
-            '%NUMBER_OF_PRIVATE_PAGES%',
-        );
+        $post_publish_count = $provider->get_post_publish_count();
+        $post_future_count  = $provider->get_post_future_count();
+        $post_draft_count   = $provider->get_post_draft_count();
+        $post_pending_count = $provider->get_post_pending_count();
+        $post_private_count = $provider->get_post_private_count();
+        $page_publish_count = $provider->get_page_publish_count();
+        $page_future_count  = $provider->get_page_future_count();
+        $page_draft_count   = $provider->get_page_draft_count();
+        $page_pending_count = $provider->get_page_pending_count();
+        $page_private_count = $provider->get_page_private_count();
 
-        // Corresponding value to replace them with
-        $values = array(
-            PHP_VERSION,
+        $generator = new Generator(
+            $humans_template,
             $wp_version,
-            implode($plugins_separator, $plugins),
-            implode($authors_separator, $authors),
-            $theme_data['Name'],
-            $theme_data['Description'],
-            $theme_data['Author Name'],
-            $theme_data['Author Uri'],
-            $theme_data['Version'],
-            $theme_data['Parent Theme'],
-            $count_posts->publish,
-            $count_posts->future,
-            $count_posts->draft,
-            $count_posts->pending,
-            $count_posts->private,
-            $count_pages->publish,
-            $count_pages->future,
-            $count_pages->draft,
-            $count_pages->pending,
-            $count_pages->private,
+            $php_version,
+            $plugins,
+            $plugins_separator,
+            $plugins_template,
+            $plugins_prefix,
+            $plugins_suffix,
+            $authors,
+            $authors_separator,
+            $authors_template,
+            $authors_prefix,
+            $authors_suffix,
+            $theme_name,
+            $theme_description,
+            $theme_author_name,
+            $theme_author_uri,
+            $theme_version,
+            $theme_parent,
+            $post_publish_count,
+            $post_future_count,
+            $post_draft_count,
+            $post_pending_count,
+            $post_private_count,
+            $page_publish_count,
+            $page_future_count,
+            $page_draft_count,
+            $page_pending_count,
+            $page_private_count,
+            $obfuscate_email
         );
 
-        $output = str_replace($needles, $values, $humans_template);
-        $output = apply_filters('humans_output', $output);
+        $result = $generator->generate();
+        $result = apply_filters('humans_output', $result);
 
         if (!$return) {
 
             header("Content-type: text/plain; charset=utf-8");
-            echo html_entity_decode($output);
+            echo html_entity_decode($result);
             exit;
         } else {
-            return $output;
+            return $result;
         }
     }
 }
-
-add_action(
-    "init",
-    create_function(
-        '',
-        '
-       if (substr($_SERVER["REDIRECT_URL"], -11, 11) == "/humans.txt")
-         HumansTxt::humans(false);
-       else
-         $ht = new HumansTxt();'
-    )
-);
