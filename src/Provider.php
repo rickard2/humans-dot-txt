@@ -2,6 +2,9 @@
 
 class HT_Provider
 {
+    /**
+     * @var WP_Theme
+     */
     protected $theme_data;
     protected $post_count_data;
     protected $page_count_data;
@@ -28,7 +31,7 @@ class HT_Provider
     public function get_plugins()
     {
         $plugins = get_option('active_plugins', array());
-        $plugins = array_map(create_function('$plugin', 'return get_plugin_data($plugin)'), $plugins);
+        $plugins = array_map(create_function('$plugin', 'return get_plugin_data($plugin);'), $plugins);
 
         return $plugins;
     }
@@ -46,32 +49,32 @@ class HT_Provider
 
     public function get_theme_name()
     {
-        return $this->theme_data['Name'];
+        return $this->theme_data->get('Name');
     }
 
     public function get_theme_description()
     {
-        return $this->theme_data['Description'];
+        return $this->theme_data->get('Description');
     }
 
     public function get_theme_author_name()
     {
-        return $this->theme_data['Author Name'];
+        return $this->theme_data->get('Author');
     }
 
     public function get_theme_author_uri()
     {
-        return $this->theme_data['Author Uri'];
+        return $this->theme_data->get('AuthorURI');
     }
 
     public function get_theme_version()
     {
-        return $this->theme_data['Version'];
+        return $this->theme_data->get('Version');
     }
 
     public function get_theme_parent()
     {
-        return $this->theme_data['Parent Theme'];
+        return $this->theme_data->get('Parent Theme');
     }
 
     public function get_post_publish_count()
@@ -126,7 +129,13 @@ class HT_Provider
 
     protected function load_theme_data()
     {
-        $this->theme_data = get_theme(get_current_theme());
+        global $wp_version;
+
+        if ((float)$wp_version < 3.4) {
+            $this->theme_data = get_theme(get_current_theme());
+        } else {
+            $this->theme_data = wp_get_theme();
+        }
     }
 
     protected function load_post_count_data()

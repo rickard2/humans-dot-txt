@@ -12,9 +12,12 @@ License: GPLv2
 /**
  * The current version of the plugin
  */
-DEFINE('HUMANS_DOT_TXT_VERSION', '1.0.3');
+DEFINE('HUMANS_DOT_TXT_VERSION', '1.1');
 
-
+require 'src/Config.php';
+require 'src/Generator.php';
+require 'src/Plugin.php';
+require 'src/Provider.php';
 
 add_action(
     "init",
