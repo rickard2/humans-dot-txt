@@ -23,7 +23,7 @@
     <fieldset>
       <legend><label for="humans_template"><?php _e("humans.txt file template", 'humans-dot-txt') ?></label></legend>
       <div class="settings">
-        <textarea id="humans_template" name="humans_template" rows="10"><?php echo $config->get_humans_template() ?></textarea>
+        <textarea id="humans_template" name="humans_template" rows="10"><?php echo esc_textarea($config->get_humans_template()) ?></textarea>
       </div>
                 
       <div class="help">
@@ -59,16 +59,16 @@
       
       <div class="settings">
         <label class="text" for="plugins_template"><?php _e("Template for a single plugin", 'humans-dot-txt') ?></label>
-        <input type="text" id="plugins_template" name="plugins_template" value="<?php echo $config->get_plugins_template() ?>" />
+        <input type="text" id="plugins_template" name="plugins_template" value="<?php echo esc_attr($config->get_plugins_template()) ?>" />
         
         <label class="text" for="plugins_separator"><?php _e("Separator between plugins", 'humans-dot-txt') ?></label>
-        <input type="text" id="plugins_separator" name="plugins_separator" value="<?php echo $config->get_plugins_separator() ?>" />
+        <input type="text" id="plugins_separator" name="plugins_separator" value="<?php echo esc_attr($config->get_plugins_separator()) ?>" />
         
         <label class="text" for="plugins_prefix"><?php _e("Prefix for each plugin", 'humans-dot-txt') ?></label>
-        <input type="text" id="plugins_prefix" name="plugins_prefix" value="<?php echo $config->get_plugins_prefix() ?>" />
+        <input type="text" id="plugins_prefix" name="plugins_prefix" value="<?php echo esc_attr($config->get_plugins_prefix()) ?>" />
         
         <label class="text" for="plugins_suffix"><?php _e("Suffix for each plugin", 'humans-dot-txt') ?></label>
-        <input type="text" id="plugins_suffix" name="plugins_suffix" value="<?php echo $config->get_plugins_suffix() ?>" />
+        <input type="text" id="plugins_suffix" name="plugins_suffix" value="<?php echo esc_attr($config->get_plugins_suffix()) ?>" />
       </div>
       
       <div class="help">
@@ -88,16 +88,16 @@
       <legend><?php _e("Authors template", 'humans-dot-txt') ?></legend>
       <div class="settings">
         <label class="text" for="authors_template"><?php _e("Template for an author", 'humans-dot-txt') ?></label>
-        <input type="text" id="authors_template" name="authors_template" value="<?php echo $config->get_authors_template() ?>" />
+        <input type="text" id="authors_template" name="authors_template" value="<?php echo esc_attr($config->get_authors_template()) ?>" />
         
         <label class="text" for="authors_separator"><?php _e("Separator between authors", 'humans-dot-txt') ?></label>
-        <input type="text" id="authors_separator" name="authors_separator" value="<?php echo $config->get_authors_separator() ?>" />
+        <input type="text" id="authors_separator" name="authors_separator" value="<?php echo esc_attr($config->get_authors_separator()) ?>" />
         
         <label class="text" for="authors_prefix"><?php _e("Prefix for each author", 'humans-dot-txt') ?></label>
-        <input type="text" id="authors_prefix" name="authors_prefix" value="<?php echo $config->get_authors_prefix() ?>" />
+        <input type="text" id="authors_prefix" name="authors_prefix" value="<?php echo esc_attr($config->get_authors_prefix()) ?>" />
         
         <label class="text" for="authors_suffix"><?php _e("Suffix for each author", 'humans-dot-txt') ?></label>
-        <input type="text" id="authors_suffix" name="authors_suffix" value="<?php echo $config->get_authors_suffix() ?>" />
+        <input type="text" id="authors_suffix" name="authors_suffix" value="<?php echo esc_attr($config->get_authors_suffix()) ?>" />
       </div>
       <div class="help">
         <?php _e("Available variables in this template:", 'humans-dot-txt') ?>
@@ -118,9 +118,6 @@
       <br/>      
       <input type="checkbox" id="humans_obfuscate_email" name="humans_obfuscate_email" value="1" <?php if ($config->get_obfuscate_email()) echo 'checked="checked"' ?> />
       <label for="humans_obfuscate_email"><?php _e("Obfuscate e-mail in the authors template?", 'humans-dot-txt') ?></label>
-    
-    <input type="hidden" name="action" value="update" />
-    <input type="hidden" name="page_options" value="humans_template,plugins_template,plugins_separator,plugins_prefix,plugins_suffix,authors_template,authors_separator,authors_prefix,authors_suffix,humans_head,humans_obfuscate_email" />
     
     <p class="submit">
       <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
