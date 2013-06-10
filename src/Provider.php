@@ -11,7 +11,6 @@ class HT_Provider
 
     public function __construct()
     {
-        $this->load_theme_data();
         $this->load_post_count_data();
         $this->load_page_count_data();
     }
@@ -49,32 +48,32 @@ class HT_Provider
 
     public function get_theme_name()
     {
-        return $this->theme_data->get('Name');
+        return $this->get_theme_data('Name');
     }
 
     public function get_theme_description()
     {
-        return $this->theme_data->get('Description');
+        return $this->get_theme_data('Description');
     }
 
     public function get_theme_author_name()
     {
-        return $this->theme_data->get('Author');
+        return $this->get_theme_data('Author');
     }
 
     public function get_theme_author_uri()
     {
-        return $this->theme_data->get('AuthorURI');
+        return $this->get_theme_data('AuthorURI');
     }
 
     public function get_theme_version()
     {
-        return $this->theme_data->get('Version');
+        return $this->get_theme_data('Version');
     }
 
     public function get_theme_parent()
     {
-        return $this->theme_data->get('Parent Theme');
+        return $this->get_theme_data('Parent Theme');
     }
 
     public function get_post_publish_count()
@@ -125,6 +124,30 @@ class HT_Provider
     public function get_page_private_count()
     {
         return $this->page_count_data->private;
+    }
+
+    protected function get_theme_data($key)
+    {
+        global $wp_version;
+
+        if (!$this->theme_data) {
+            $this->load_theme_data();
+        }
+
+        $pre34KeyMap = array(
+            'Name'         => 'Name',
+            'Description'  => 'Description',
+            'Author'       => 'Author Name',
+            'AuthorUri'    => 'Author Uri',
+            'Version'      => 'Version',
+            'Parent Theme' => 'Parent Theme',
+        );
+
+        if ((float)$wp_version < 3.4) {
+            return $this->theme_data[$pre34KeyMap[$key]];
+        } else {
+            return $this->theme_data->get($key);
+        }
     }
 
     protected function load_theme_data()
