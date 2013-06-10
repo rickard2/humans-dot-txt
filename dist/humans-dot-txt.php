@@ -12,21 +12,30 @@ License: GPLv2
 /**
  * The current version of the plugin
  */
-DEFINE('HUMANS_DOT_TXT_VERSION', '1.1');
+define('HUMANS_DOT_TXT_VERSION', '1.1');
 
-require 'src/Config.php';
-require 'src/Generator.php';
-require 'src/Plugin.php';
-require 'src/Provider.php';
 
-add_action(
-    "init",
-    create_function(
-        '',
-        '
-       if (substr($_SERVER["REDIRECT_URL"], -11, 11) == "/humans.txt")
-         HumansTxt::humans(false);
-       else
-         $ht = new HumansTxt();'
-    )
-);
+/**
+ * Development mode?
+ */
+define('HUMANS_DEV', true);
+
+
+$__prefix = HUMANS_DEV ? '/www/humans-dot-txt/' : '';
+
+
+require $__prefix . 'src/Config.php';
+require $__prefix . 'src/Generator.php';
+require $__prefix . 'src/Plugin.php';
+require $__prefix . 'src/Provider.php';
+
+function _humans_init()
+{
+    if (isset($_SERVER['REDIRECT_URL']) && substr($_SERVER['REDIRECT_URL'], -11, 11) == '/humans.txt') {
+        HumansTxt::humans(false);
+    } else {
+        new HumansTxt();
+    }
+}
+
+add_action('init', '_humans_init');

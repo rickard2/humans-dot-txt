@@ -112,7 +112,7 @@ class HumansTxt
 
         wp_enqueue_style('humans-dot-txt', plugins_url() . '/humans-dot-txt/css/main.css');
 
-        // To perserve heading or trailing spaces from these settings, just return the raw value since
+        // To preserve heading or trailing spaces from these settings, just return the raw value since
         // WordPress does some trimming of its own. This is needed so that you could have ", " as plugins
         // or authors separator.
         register_setting(
@@ -147,7 +147,7 @@ class HumansTxt
      */
     function options_page()
     {
-        require "options_page.php";
+        require dirname(__FILE__) . '/../pages/options_page.php';
     }
 
     static function humans($return)
