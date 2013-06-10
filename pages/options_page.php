@@ -4,7 +4,7 @@
   <?php if ($this->generated === false) : ?>
   
   <div class="error">
-    <?php printf(__("It seems like you're not using a .htaccess file to generate user friendly URL:s and the root of your page (%s) isn't writable by the web server user. Please use chmod or chown to change the permissions or ownership of the directory.", 'humans-dot-txt'), ABSPATH) ?>
+    <p><?php printf(__("It seems like you're not using a .htaccess file to generate user friendly URL:s and the root of your page (%s) isn't writable by the web server user. Please create the file humans.txt in your web root and use chmod or chown to change the permissions or ownership to allow the web server to write to it.", 'humans-dot-txt'), ABSPATH) ?></p>
   </div>
   
   <?php endif; // this generated ?>
@@ -12,7 +12,7 @@
   <?php if ($this->htaccess === false && MULTISITE === true) : ?> 
   	
   	<div class="error">
-  		<?php _e("You're using humans-dot-txt without a .htaccess file on a multisite network install. This is known to cause problems with this version of humans-dot-txt. Please add a .htaccess file for friendly URL:s if you're having more than one site currently active.", 'humans-dot-txt') ?>
+  		<p><?php _e("You're using humans-dot-txt without a .htaccess file on a multisite network install. This is known to cause problems with this version of humans-dot-txt. Please add a .htaccess file for friendly URL:s if you're having more than one site currently active.", 'humans-dot-txt') ?></p>
 	</div>
 	
   <?php endif; // htaccess && multisite ?> 
