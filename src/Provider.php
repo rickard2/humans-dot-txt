@@ -155,7 +155,7 @@ class HT_Provider
             'Name'         => 'Name',
             'Description'  => 'Description',
             'Author'       => 'Author Name',
-            'AuthorUri'    => 'Author Uri',
+            'AuthorURI'    => 'Author Uri',
             'Version'      => 'Version',
             'Parent Theme' => 'Parent Theme',
         );
