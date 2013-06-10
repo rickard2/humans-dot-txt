@@ -40,7 +40,7 @@ class HT_Config
 
     public function set_humans_template($value)
     {
-        return $this->_set('humans_template', $this->_sanitize($value));
+        return $this->_set('humans_template', $this->_sanitize_text_area($value));
     }
 
     public function get_authors_template()
@@ -50,7 +50,7 @@ class HT_Config
 
     public function set_authors_template($value)
     {
-        return $this->_set('authors_template', $this->_sanitize($value));
+        return $this->_set('authors_template', $this->_sanitize_text_area($value));
     }
 
     public function get_authors_separator()
@@ -70,7 +70,7 @@ class HT_Config
 
     public function set_authors_prefix($value)
     {
-        return $this->_set('authors_prefix', $this->_sanitize($value));
+        return $this->_set('authors_prefix', $this->_sanitize_text_field($value));
     }
 
     public function get_authors_suffix()
@@ -80,7 +80,7 @@ class HT_Config
 
     public function set_authors_suffix($value)
     {
-        return $this->_set('authors_suffix', $this->_sanitize($value));
+        return $this->_set('authors_suffix', $this->_sanitize_text_field($value));
     }
 
     public function get_plugins_template()
@@ -90,7 +90,7 @@ class HT_Config
 
     public function set_plugins_template($value)
     {
-        return $this->_set('plugins_template', $this->_sanitize($value));
+        return $this->_set('plugins_template', $this->_sanitize_text_area($value));
     }
 
     public function get_plugins_separator()
@@ -110,7 +110,7 @@ class HT_Config
 
     public function set_plugins_prefix($value)
     {
-        return $this->_set('plugins_prefix', $this->_sanitize($value));
+        return $this->_set('plugins_prefix', $this->_sanitize_text_field($value));
     }
 
     public function get_plugins_suffix()
@@ -120,7 +120,7 @@ class HT_Config
 
     public function set_plugins_suffix($value)
     {
-        return $this->_set('plugins_suffix', $this->_sanitize($value));
+        return $this->_set('plugins_suffix', $this->_sanitize_text_field($value));
     }
 
     public function get_obfuscate_email()
@@ -152,7 +152,12 @@ class HT_Config
         return $this->$option;
     }
 
-    protected function _sanitize($value)
+    protected function _sanitize_text_area($value)
+    {
+        return stripslashes($value);
+    }
+
+    protected function _sanitize_text_field($value)
     {
         $value = sanitize_text_field($value);
         $value = stripslashes($value);
