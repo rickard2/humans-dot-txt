@@ -19,7 +19,6 @@ class HumansTxt
      */
     function __construct()
     {
-
         // If .htaccess file doesn't exist, try to create the file on disk instead.
         if (!file_exists(ABSPATH . '.htaccess')) {
             $this->generated = $this->generateFile();
@@ -45,7 +44,7 @@ class HumansTxt
      */
     function generateFile()
     {
-        if (is_writable(ABSPATH) || file_exists(ABSPATH . 'humans.txt') && is_writable(ABSPATH . 'humans.txt')) {
+        if (is_writable(ABSPATH) || (file_exists(ABSPATH . 'humans.txt') && is_writable(ABSPATH . 'humans.txt'))) {
             $result = file_put_contents(ABSPATH . 'humans.txt', HumansTxt::humans(true));
 
             return $result !== false;
@@ -125,7 +124,6 @@ class HumansTxt
      * Includes the options page template from another file. This page is displayed when the user selects the
      * menu item for this plugin in the admin menu.
      *
-     * @todo  Ajax preview would be nice
      * @since 1.0
      * @return void
      */

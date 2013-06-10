@@ -18,7 +18,7 @@ define('HUMANS_DOT_TXT_VERSION', '1.1');
 /**
  * Development mode?
  */
-define('HUMANS_DEV', true);
+define('HUMANS_DEV', false);
 
 
 $__prefix = HUMANS_DEV ? '/www/humans-dot-txt/' : '';
