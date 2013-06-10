@@ -93,14 +93,30 @@ class HumansTxt
      */
     function admin_init()
     {
-        wp_enqueue_script(
-            'jquery.autogrow',
-            plugins_url() . '/humans-dot-txt/js/jquery.autogrow.js',
-            array('jquery'),
-            1,
-            false
-        );
-        wp_enqueue_script('humans-dot-txt', plugins_url() . '/humans-dot-txt/js/main.js', array('jquery'), 1, true);
+        if (HUMANS_DEV) {
+            wp_enqueue_script(
+                'jquery.autogrow',
+                plugins_url() . '/humans-dot-txt/js/vendor/jquery.autogrow.js',
+                array('jquery'),
+                1,
+                false
+            );
+            wp_enqueue_script(
+                'humans-dot-txt',
+                plugins_url() . '/humans-dot-txt/js/src/main.js',
+                array('jquery', 'jquery.autogrow'),
+                1,
+                true
+            );
+        } else {
+            wp_enqueue_script(
+                'humans-dot-txt',
+                plugins_url() . '/humans-dot-txt/js/main.min.js',
+                array('jquery'),
+                1,
+                true
+            );
+        }
 
         wp_enqueue_style('humans-dot-txt', plugins_url() . '/humans-dot-txt/css/main.css');
     }
