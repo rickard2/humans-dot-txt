@@ -11,13 +11,6 @@ class HumansTxt
      * Stores the result from generateFile(); call
      */
     private $generated = null;
-    private $settings = array(
-        'humans_template',
-        'plugins_template',
-        'authors_template',
-        'humans_head',
-        'humans_obfuscate_email'
-    );
 
     /**
      * When the class is loaded, all the neccessary hooks are added
@@ -100,7 +93,6 @@ class HumansTxt
      */
     function admin_init()
     {
-
         wp_enqueue_script(
             'jquery.autogrow',
             plugins_url() . '/humans-dot-txt/js/jquery.autogrow.js',
@@ -111,30 +103,6 @@ class HumansTxt
         wp_enqueue_script('humans-dot-txt', plugins_url() . '/humans-dot-txt/js/main.js', array('jquery'), 1, true);
 
         wp_enqueue_style('humans-dot-txt', plugins_url() . '/humans-dot-txt/css/main.css');
-
-        // To preserve heading or trailing spaces from these settings, just return the raw value since
-        // WordPress does some trimming of its own. This is needed so that you could have ", " as plugins
-        // or authors separator.
-        register_setting(
-            'humans-dot-txt',
-            'plugins_separator',
-            create_function('$a', 'return $_POST["plugins_separator"];')
-        );
-        register_setting('humans-dot-txt', 'plugins_prefix', create_function('$a', 'return $_POST["plugins_prefix"];'));
-        register_setting('humans-dot-txt', 'plugins_suffix', create_function('$a', 'return $_POST["plugins_suffix"];'));
-
-        register_setting(
-            'humans-dot-txt',
-            'authors_separator',
-            create_function('$a', 'return $_POST["authors_separator"];')
-        );
-        register_setting('humans-dot-txt', 'authors_prefix', create_function('$a', 'return $_POST["authors_prefix"];'));
-        register_setting('humans-dot-txt', 'authors_suffix', create_function('$a', 'return $_POST["authors_suffix"];'));
-
-        foreach ($this->settings as $setting) {
-            register_setting('humans-dot-txt', $setting);
-        }
-
     }
 
     /**
@@ -147,12 +115,30 @@ class HumansTxt
      */
     function options_page()
     {
+        $config = HT_Config::get_instance();
+
+        if (isset($_POST['_wpnonce']) && wp_verify_nonce($_POST['_wpnonce'], 'humans-dot-txt-options')) {
+            $config->set_humans_template($_POST['humans_template']);
+            $config->set_plugins_template($_POST['plugins_template']);
+            $config->set_plugins_separator($_POST['plugins_separator']);
+            $config->set_plugins_prefix($_POST['plugins_prefix']);
+            $config->set_plugins_suffix($_POST['plugins_suffix']);
+            $config->set_authors_template($_POST['authors_template']);
+            $config->set_authors_separator($_POST['authors_separator']);
+            $config->set_authors_prefix($_POST['authors_prefix']);
+            $config->set_authors_suffix($_POST['authors_suffix']);
+            $config->set_obfuscate_email(
+                isset($_POST['humans_obfuscate_email']) ? $_POST['humans_obfuscate_email'] : false
+            );
+            $config->set_head(isset($_POST['humans_head']) ? $_POST['humans_head'] : false);
+        }
+
         require dirname(__FILE__) . '/../pages/options_page.php';
     }
 
     static function humans($return)
     {
-        $config   = new HT_Config();
+        $config   = HT_Config::get_instance();
         $provider = new HT_Provider();
 
         $humans_template = $config->get_humans_template();
