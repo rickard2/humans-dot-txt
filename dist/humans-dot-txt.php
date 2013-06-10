@@ -31,7 +31,7 @@ require $__prefix . 'src/Provider.php';
 
 function _humans_init()
 {
-    if (isset($_SERVER['REDIRECT_URL']) && substr($_SERVER['REDIRECT_URL'], -11, 11) == '/humans.txt') {
+    if (isset($_SERVER['REQUEST_URI']) && substr($_SERVER['REQUEST_URI'], -11, 11) == '/humans.txt') {
         HumansTxt::humans(false);
     } else {
         new HumansTxt();
