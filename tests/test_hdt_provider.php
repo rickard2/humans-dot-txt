@@ -51,7 +51,16 @@ class HDT_Test_Provider extends PHPUnit_Framework_TestCase
     public function test_authors()
     {
         $provider = new HT_Provider();
-        $this->assertNotEmpty($provider->get_authors());
+        $authors  = $provider->get_authors();
+
+        $this->assertNotEmpty($authors, 'get_authors should return an array of authors');
+        $this->assertCount(1, $authors, 'get_authors should return an array of authors');
+
+        $author = $authors[0];
+
+        $this->assertNotEmpty($author->user_login, 'Author data should contain user_login');
+        $this->assertNotEmpty($author->display_name, 'Author data should contain display_name');
+        $this->assertNotEmpty($author->user_email, 'Author data should contain user_email');
     }
 
     public function test_theme_name()
