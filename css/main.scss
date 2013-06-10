@@ -1,0 +1,57 @@
+#humans-dot-txt {
+    fieldset {
+        border: solid 1px #ccc;
+        border-radius: 9px;
+        -moz-border-radius: 9px;
+        -webkit-border-radius: 9px;
+        padding: 10px;
+    }
+
+    legend {
+        margin-left: 5px;
+        font-weight: bold;
+    }
+
+    textarea {
+        width: 90%;
+    }
+
+    .settings {
+        width: 65%;
+        float: left;
+    }
+
+    .help {
+        width: 25%;
+        float: left;
+    }
+
+    input[type='text'], label.text {
+        width: 45%;
+        display: block;
+        float: left;
+    }
+}
+
+#humans_modal {
+    padding: 10px;
+    display: none;
+    position: fixed;
+    top: 100px;
+    left: 40%;
+    width: 500px;
+    height: 250px;
+    border: solid 10px #ccc;
+    border-radius: 13px;
+    -moz-border-radius: 13px;
+    -webkit-border-radius: 13px;
+    background: #fff;
+}
+
+#humans_suggestion_close {
+    float: right;
+}
+
+#humans_suggestion_loading, #humans_suggestion_done {
+    display: none;
+}
