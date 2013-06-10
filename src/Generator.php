@@ -38,36 +38,36 @@ class Generator
     protected $page_private_count;
 
     public function __construct(
-        $template,
-        $wp_version,
-        $php_version,
-        $plugins,
-        $plugins_separator,
-        $plugins_template,
-        $plugins_prefix,
-        $plugins_suffix,
-        $authors,
-        $authors_separator,
-        $authors_template,
-        $authors_prefix,
-        $authors_suffix,
-        $theme_name,
-        $theme_description,
-        $theme_author_name,
-        $theme_author_uri,
-        $theme_version,
-        $theme_parent,
-        $post_publish_count,
-        $post_future_count,
-        $post_draft_count,
-        $post_pending_count,
-        $post_private_count,
-        $page_publish_count,
-        $page_future_count,
-        $page_draft_count,
-        $page_pending_count,
-        $page_private_count,
-        $obfuscate_email
+        $template = '',
+        $wp_version = '',
+        $php_version = '',
+        $plugins = array(),
+        $plugins_separator = '',
+        $plugins_template = '',
+        $plugins_prefix = '',
+        $plugins_suffix = '',
+        $authors = array(),
+        $authors_separator = '',
+        $authors_template = '',
+        $authors_prefix = '',
+        $authors_suffix = '',
+        $theme_name = '',
+        $theme_description = '',
+        $theme_author_name = '',
+        $theme_author_uri = '',
+        $theme_version = '',
+        $theme_parent = '',
+        $post_publish_count = 0,
+        $post_future_count = 0,
+        $post_draft_count = 0,
+        $post_pending_count = 0,
+        $post_private_count = 0,
+        $page_publish_count = 0,
+        $page_future_count = 0,
+        $page_draft_count = 0,
+        $page_pending_count = 0,
+        $page_private_count = 0,
+        $obfuscate_email = false
     ) {
         $this->template           = $template;
         $this->wp_version         = $wp_version;
@@ -186,11 +186,11 @@ class Generator
 
             $values = array(
                 $plugin['Name'],
-                $plugin['PluginUri'],
+                $plugin['PluginURI'],
                 $plugin['Version'],
                 strip_tags($plugin['Description']),
                 strip_tags($plugin['Author']),
-                $plugin['AuthorUri']
+                $plugin['AuthorURI']
             );
 
             $plugin = str_replace($plugin_template_needles, $values, $this->plugins_template);
