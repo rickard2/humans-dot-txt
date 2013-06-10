@@ -29,10 +29,27 @@ class HT_Provider
 
     public function get_plugins()
     {
+        require_once ABSPATH . 'wp-admin/includes/plugin.php';
+
         $plugins = get_option('active_plugins', array());
-        $plugins = array_map(create_function('$plugin', 'return get_plugin_data($plugin);'), $plugins);
+
+        $dir = getcwd();
+        chdir(WP_PLUGIN_DIR);
+
+        $plugins = array_map(array($this, '_plugin_data_mapper'), $plugins);
+
+        chdir($dir);
 
         return $plugins;
+    }
+
+    protected function _plugin_data_mapper($plugin)
+    {
+        $data                = get_plugin_data($plugin);
+        $data['Author']      = strip_tags($data['Author']);
+        $data['Description'] = strip_tags($data['Description']);
+
+        return $data;
     }
 
     public function get_authors()

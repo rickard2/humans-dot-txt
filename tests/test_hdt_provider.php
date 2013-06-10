@@ -16,8 +16,36 @@ class HDT_Test_Provider extends PHPUnit_Framework_TestCase
 
     public function test_plugins()
     {
+        require_once(ABSPATH . 'wp-admin/includes/plugin.php');
+
+        $res = activate_plugin('hello.php');
+
+        $this->assertNull($res, 'Unable to activate plugin');
+
         $provider = new HT_Provider();
-        $this->assertNotNull($provider->get_plugins());
+        $plugins  = $provider->get_plugins();
+
+        deactivate_plugins('hello');
+
+        $this->assertNotEmpty($plugins, 'get_plugins should return an array of active plugins');
+        $this->assertCount(1, $plugins, 'get_plugins should only return the currently active plugins');
+
+        $plugin = $plugins[0];
+
+        $this->assertNotEmpty($plugin['Name'], 'Plugin data should contain Name');
+        $this->assertNotEmpty($plugin['PluginURI'], 'Plugin data should contain PluginURI');
+        $this->assertNotEmpty($plugin['Version'], 'Plugin data should contain Version');
+        $this->assertNotEmpty($plugin['Description'], 'Plugin data should contain Description');
+        $this->assertNotEmpty($plugin['Author'], 'Plugin data should contain Author');
+        $this->assertNotEmpty($plugin['AuthorURI'], 'Plugin data should contain AuthorURI');
+
+        $this->assertEquals(
+            strip_tags($plugin['Description']),
+            $plugin['Description'],
+            'Description should not contain HTML'
+        );
+        $this->assertEquals(strip_tags($plugin['Author']), $plugin['Author'], 'Author should not contain HTML');
+
     }
 
     public function test_authors()
