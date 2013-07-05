@@ -1,6 +1,6 @@
 <?php
 
-class Generator
+class HT_Generator
 {
     protected $template;
     protected $wp_version;

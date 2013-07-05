@@ -193,7 +193,7 @@ class HumansTxt
         $page_pending_count = $provider->get_page_pending_count();
         $page_private_count = $provider->get_page_private_count();
 
-        $generator = new Generator(
+        $generator = new HT_Generator(
             $humans_template,
             $wp_version,
             $php_version,
