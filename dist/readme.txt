@@ -3,7 +3,7 @@ Contributors: exz
 Tags: humans.txt
 Requires at least: 2.7.0
 Tested up to: 3.6-beta3
-Stable tag: 1.1
+Stable tag: 1.1.1
 Donate link: https://flattr.com/thing/128629/Humans-dot-txt
 
 This plugin will add a dynamic humans.txt file generated from a template that you'll define yourself. 
@@ -44,6 +44,10 @@ There isn't really any point in having screenshots for this plugin, since it onl
 
 == Changelog ==
 
+= 1.1.1 =
+
+* Fixed PHP 5.5 compatibility
+
 = 1.1 =
 
 * Fixed some issues with newer WordPress versions
@@ -67,6 +71,10 @@ Minor bug fix with suggestions URL being wrong
 Initial release 
 
 == Upgrade Notice ==
+
+= 1.1.1 =
+
+Fixed PHP 5.5 compatibility
 
 = 1.1 =
 
